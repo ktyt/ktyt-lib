@@ -1,4 +1,6 @@
 from __future__ import print_function # Import print function for printing to stderr
+import sys
+import datetime
 '''
 A simple class representing a single comic strip.
 '''
@@ -18,8 +20,7 @@ class Comic:
 # It is the responsiblity of the caller to close the file
 # file - The transcript file to read from
 def comicFromTranscript(file):
-	dateStr = file.readline()[1:-5] # Remove enclosing brackets and newline
-	print(dateStr)
+	dateStr = file.readline()[1:-2] # Remove enclosing brackets and newline
 	date = None
 	# Parse dateStr
 	if not dateStr.startswith("//"): # Check for separate timelines
@@ -41,13 +42,13 @@ def comicFromTranscript(file):
 	content = "" # A single line of content
 	while True:
 		content = file.readline()
-		if content == "" or content[0] == "<" or content == "[No commentary]": # End of file or end of content, end
+		if content == "" or content[0] == "<" or content.startswith("[No commentary]"): # End of file or end of content, end
 			break
 		allcontent += content # Add content
 	if content == "": # End of file
 		print("Error: No commentary specified!", file=sys.stderr)
 		return None
-	commentary = content # Copy content
+	commentary = "" if content.startswith("[No commentary]") else content # Copy content
 	
 	# Create and return the Comic class
 	return Comic(date, title, allcontent, commentary)
