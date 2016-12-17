@@ -48,7 +48,7 @@ def comicFromTranscript(file):
 	if content == "": # End of file
 		print("Error: No commentary specified!", file=sys.stderr)
 		return None
-	commentary = "" if content.startswith("[No commentary]") else content # Copy content
+	commentary = "" if content.startswith("[No commentary]") else content[1:-2] # Copy content
 	
 	# Create and return the Comic class
 	return Comic(date, title, allcontent, commentary)
